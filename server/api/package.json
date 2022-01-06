@@ -24,10 +24,10 @@
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
+    "bazel_nestjs_with_shared/shared": "file:../../shared",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
-    "bazel_nestjs_with_shared/shared": "file:../../shared"
+    "rxjs": "^7.2.0"
   },
   "devDependencies": {
     "@bazel/typescript": "^4.6.0",
