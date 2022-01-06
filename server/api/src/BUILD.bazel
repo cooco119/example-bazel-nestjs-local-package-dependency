@@ -1,0 +1,51 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
+load("@npm_server_api//@bazel/typescript:index.bzl", "ts_config", "ts_project")
+
+package(default_visibility = ["//visibility:public"])
+
+# needed to be set to use 'extends'
+ts_config(
+    name = "tsconfig",
+    src = "//server/api:tsconfig.build.json",
+    deps = [
+        "//server/api:tsconfig.build.json",
+        "//server/api:tsconfig.json",
+    ],
+)
+
+ts_project(
+    name = "app",
+    srcs = glob(
+        ["*.ts"],
+        exclude = ["*.spec.ts"],
+    ),
+    declaration = True,
+    tsconfig = ":tsconfig",
+    
+    deps = [
+        "@npm_server_api//@nestjs/common",
+        "@npm_server_api//@nestjs/core",
+        "@npm_server_api//@nestjs/platform-express",
+        "@npm_server_api//@types/node",
+        "@npm_server_api//tslib",
+        "//shared",
+    ],
+)
+
+exports_files(["tsconfig.json"])
+
+nodejs_binary(
+    name = "server",
+    data = [
+        ":app",
+        "@npm_server_api//@nestjs/common",
+        "@npm_server_api//@nestjs/core",
+    ],
+    entry_point = "main.ts",
+)
+
+nodejs_image(
+    name = "docker",
+    binary = ":server",
+)

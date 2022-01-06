@@ -1,0 +1,15 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@npm_server_api//@bazel/typescript:index.bzl", "ts_library")
+
+# Should write as {workspace_name}/shared when adding as dependency in importing package.json
+ts_library(
+    name = "shared",
+    package_name = "shared",
+    srcs = glob([
+        "*.ts",
+    ]),
+    tsconfig = "//shared:tsconfig.json",
+)
+
+exports_files(["tsconfig.json"])
